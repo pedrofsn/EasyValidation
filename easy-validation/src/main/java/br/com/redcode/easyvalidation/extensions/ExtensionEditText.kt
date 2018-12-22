@@ -49,3 +49,8 @@ fun EditText.hideKeyboard() {
 fun EditText.setMessageError(message: String, color: String = "red") {
     error = "<font color='$color'>$message</font>".toSpannedHTML()
 }
+
+fun EditText.getString(): String {
+    hideKeyboard()
+    return text.toString().trim()
+}
