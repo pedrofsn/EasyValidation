@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">easy-form</string>
+    <string name="o_campo_x_nao_foi_preenchido">"O campo '%s' não foi preenchido"</string>
+</resources>

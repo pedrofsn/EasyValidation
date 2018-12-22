@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">EasyFormValidation</string>
+    <string name="email">E-mail</string>
+    <string name="validate">Validar</string>
+</resources>
