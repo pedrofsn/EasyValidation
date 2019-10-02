@@ -9,14 +9,14 @@ import br.com.redcode.easyvalidation.isNullOrEmpty
  * Created by pedrofsn on 31/10/2017.
  */
 
-fun <T : Spinner> T.getDataAfterValidateInput(errorMessage: String = context.getString(R.string.o_campo_x_nao_foi_preenchido)): String? {
+fun <T : Spinner> T.getDataAfterValidateInput(errorMessage: String = context.getString(R.string.field_x_is_not_filled)): String? {
     val data: String? = if (selectedItemPosition == 0) null else getStringFromSpinner()
 
     if (isNullOrEmpty(data) && !isNullOrEmpty(context)) {
-        val defaulValueSpinner = if (!isNullOrEmpty(selectedItem)) selectedItem.toString() else null
+        val defaultValueSpinner = if (!isNullOrEmpty(selectedItem)) selectedItem.toString() else null
 
-        if (isNullOrEmpty(defaulValueSpinner).not()) {
-            Toast.makeText(context, String.format(errorMessage, defaulValueSpinner), Toast.LENGTH_SHORT).show()
+        if (isNullOrEmpty(defaultValueSpinner).not()) {
+            Toast.makeText(context, String.format(errorMessage, defaultValueSpinner), Toast.LENGTH_SHORT).show()
         }
     }
 

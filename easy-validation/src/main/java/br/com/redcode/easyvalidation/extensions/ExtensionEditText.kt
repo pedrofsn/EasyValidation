@@ -7,7 +7,7 @@ import android.widget.FrameLayout
 import br.com.redcode.easyform.library.R
 import com.google.android.material.textfield.TextInputLayout
 
-fun EditText.getDataAfterValidateInput(errorMessage: String = context.getString(R.string.o_campo_x_nao_foi_preenchido), fieldName: String? = null): String? {
+fun EditText.getDataAfterValidateInput(errorMessage: String = context.getString(R.string.field_x_is_not_filled), fieldName: String? = null): String? {
     val data: String? = getStringFromEditText()
     val hint: String? = when {
         fieldName != null && fieldName.isNotBlank() -> fieldName.toString()
