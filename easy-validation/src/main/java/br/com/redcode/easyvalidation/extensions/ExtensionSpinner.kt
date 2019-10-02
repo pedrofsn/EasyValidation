@@ -9,7 +9,7 @@ import br.com.redcode.easyvalidation.isNullOrEmpty
  * Created by pedrofsn on 31/10/2017.
  */
 
-fun <T : Spinner> T.getDataAfterValidateInput(errorMessage: String = context.getString(R.string.field_x_is_not_filled)): String? {
+fun <T : Spinner> T.getDataAfterValidateInput(errorMessage: String = context.getString(R.string.this_field_is_not_filled)): String? {
     val data: String? = if (selectedItemPosition == 0) null else getStringFromSpinner()
 
     if (isNullOrEmpty(data) && !isNullOrEmpty(context)) {

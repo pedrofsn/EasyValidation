@@ -5,7 +5,7 @@ import android.widget.Toast
 import br.com.redcode.easyform.library.R
 import br.com.redcode.easyvalidation.isNullOrEmpty
 
-fun TextView.getDataAfterValidateInput(errorMessage: String = context.getString(R.string.field_x_is_not_filled)): String? {
+fun TextView.getDataAfterValidateInput(errorMessage: String = context.getString(R.string.this_field_is_not_filled)): String? {
     val fakeEditText = hint.isNullOrBlank().not()
     val data = if (text.isNullOrEmpty()) null else text.toString()
     val hint = if (fakeEditText) hint.toString() else null
