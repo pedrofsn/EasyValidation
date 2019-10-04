@@ -16,9 +16,3 @@ fun TextView.getDataAfterValidateInput(errorMessage: String = context.getString(
 
     return data
 }
-
-fun TextView.setHTML(html: String?) {
-    html?.let {
-        text = it.toSpannedHTML()
-    }
-}
