@@ -4,11 +4,17 @@ import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
+import androidx.annotation.StringRes
 import br.com.redcode.easyform.library.R
+import br.com.redcode.easyvalidation.Validate
 import com.google.android.material.textfield.TextInputLayout
 
-fun EditText.getDataAfterValidateInput(errorMessage: String = context.getString(R.string.this_field_is_not_filled), fieldName: String? = null): String? {
+fun EditText.getDataAfterValidateInput(
+    errorMessage: String? = null,
+    fieldName: String? = null
+): String? {
     val data: String? = getStringFromEditText()
+    val isEmptyData = data == null || data.isBlank()
     val hint: String? = when {
         fieldName != null && fieldName.isNotBlank() -> fieldName.toString()
         hint != null && hint.isNotBlank() -> hint.toString()
@@ -18,11 +24,22 @@ fun EditText.getDataAfterValidateInput(errorMessage: String = context.getString(
 
     hideKeyboard()
 
-    if ((data == null || data.isBlank()) && errorMessage.isNotBlank()) {
-        setMessageError(String.format(errorMessage, hint))
-        return null
-    } else {
-        error = null
+    when {
+        isEmptyData && errorMessage?.isBlank()?.not() == true -> {
+            setMessageError(errorMessage)
+            return null
+        }
+        isEmptyData && hint.isNullOrBlank().not() -> {
+            val errorField = context.getString(R.string.field_x_is_not_filled, hint)
+            setMessageError(errorField)
+            return null
+        }
+        isEmptyData && hint.isNullOrBlank() -> {
+            val errorGeneric = context.getString(R.string.this_field_is_not_filled)
+            setMessageError(errorGeneric)
+            return null
+        }
+        else -> error = null
     }
 
     return data
@@ -42,15 +59,37 @@ fun EditText.showKeyboard() {
 }
 
 fun EditText.hideKeyboard() {
-    val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    val inputMethodManager =
+        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
 }
 
-fun EditText.setMessageError(message: String, color: String = "red") {
-    error = "<font color='$color'>$message</font>".toSpannedHTML()
+fun EditText.setMessageError(message: String) {
+//    error = "<font color='$color'>$message</font>".toSpannedHTML()
+    error = message
 }
 
-fun EditText.getString(): String {
-    hideKeyboard()
+fun EditText.getString(hideKeyboard: Boolean = true): String {
+    if (hideKeyboard) {
+        hideKeyboard()
+    }
     return text.toString().trim()
+}
+
+fun EditText?.isFilled(fieldName: String? = null) = when {
+    this == null -> false
+    fieldName == null -> Validate.isFilled(this)
+    else -> {
+        val content = getDataAfterValidateInput(fieldName = fieldName)
+        val result = content.isNullOrBlank().not()
+        result
+    }
+}
+
+infix fun EditText?.isFilledWithHint(@StringRes idString: Int): Boolean {
+    return isFilledWithHint(this?.context?.getString(idString))
+}
+
+infix fun EditText?.isFilledWithHint(fieldName: String?): Boolean {
+    return isFilled(fieldName = fieldName)
 }

@@ -2,6 +2,7 @@ package br.com.redcode.easyvalidation.extensions
 
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.StringRes
 import br.com.redcode.easyform.library.R
 import br.com.redcode.easyvalidation.isNullOrEmpty
 
@@ -15,4 +16,15 @@ fun TextView.getDataAfterValidateInput(errorMessage: String = context.getString(
     }
 
     return data
+}
+
+infix fun TextView?.isFilledWithHint(@StringRes idString: Int): Boolean {
+    return isFilledWithHint(this?.context?.getString(idString))
+}
+
+infix fun TextView?.isFilledWithHint(fieldName: String?): Boolean {
+    val errorMessage = this?.context?.getString(R.string.field_x_is_not_filled, fieldName)
+    return errorMessage != null && this?.getDataAfterValidateInput(errorMessage)
+        .isNullOrBlank()
+        .not()
 }
