@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import androidx.annotation.StringRes
 import br.com.redcode.easyform.library.R
 import br.com.redcode.easyvalidation.Validate
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 fun EditText.getDataAfterValidateInput(
@@ -65,8 +66,18 @@ fun EditText.hideKeyboard() {
 }
 
 fun EditText.setMessageError(message: String) {
-//    error = "<font color='$color'>$message</font>".toSpannedHTML()
-    error = message
+    val textInputEditText = (this as? TextInputEditText)
+
+    when {
+        textInputEditText != null -> {
+            val textInputLayout: TextInputLayout? =
+                (textInputEditText.parent?.parent as? TextInputLayout)
+            textInputLayout?.error = message
+        }
+        else -> {
+            error = message
+        }
+    }
 }
 
 fun EditText.getString(hideKeyboard: Boolean = true): String {

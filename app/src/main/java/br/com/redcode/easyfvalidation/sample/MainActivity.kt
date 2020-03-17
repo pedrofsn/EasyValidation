@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.redcode.easyvalidation.Validate
-import br.com.redcode.easyvalidation.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -16,8 +15,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun validate(view: View?) {
-        if (Validate check editTextEmail) {
-            editTextEmail.hideKeyboard()
+        if (Validate.isFilled(editTextEmail, textInputEditText)) {
             val text = editTextEmail.editableText.toString().trim()
             Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
         }
