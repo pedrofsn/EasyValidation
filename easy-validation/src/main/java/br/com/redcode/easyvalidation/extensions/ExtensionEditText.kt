@@ -6,8 +6,6 @@ import android.widget.EditText
 import androidx.annotation.StringRes
 import br.com.redcode.easyform.library.R
 import br.com.redcode.easyvalidation.Validate
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 
 fun EditText.getDataAfterValidateInput(
     errorMessage: String? = null,
@@ -15,12 +13,7 @@ fun EditText.getDataAfterValidateInput(
 ): String? {
     val data: String? = getStringFromEditText()
     val isEmptyData = data == null || data.isBlank()
-    val hint: String? = when {
-        fieldName != null && fieldName.isNotBlank() -> fieldName.toString()
-        hint != null && hint.isNotBlank() -> hint.toString()
-        isWrappedByTextInputLayout() -> getTextInputLayout()?.hint?.toString()
-        else -> null
-    }
+    val hint: String? = getHint(fieldName)
 
     hideKeyboard()
 
@@ -47,6 +40,13 @@ fun EditText.getDataAfterValidateInput(
     return data
 }
 
+private fun EditText.getHint(fieldName: String?) = when {
+    fieldName != null && fieldName.isNotBlank() -> fieldName.toString()
+    hint != null && hint.isNotBlank() -> hint.toString()
+    isWrappedByTextInputLayout() -> getTextInputLayout()?.hint?.toString()
+    else -> null
+}
+
 private fun EditText.getStringFromEditText(): String {
     editableText?.toString()?.trim()?.apply {
         if (isNotBlank()) return this
@@ -66,18 +66,10 @@ fun EditText.hideKeyboard() {
     inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
 }
 
-fun EditText.setMessageError(message: String) {
-    val textInputEditText = (this as? TextInputEditText)
-
+fun EditText.setMessageError(message: String?) {
     when {
-        textInputEditText != null -> {
-            val textInputLayout: TextInputLayout? =
-                (textInputEditText.parent?.parent as? TextInputLayout)
-            textInputLayout?.error = message
-        }
-        else -> {
-            error = message
-        }
+        isWrappedByTextInputLayout() -> getTextInputLayout()?.error = message
+        else -> error = message
     }
 }
 
