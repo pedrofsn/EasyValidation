@@ -3,7 +3,6 @@ package br.com.redcode.easyvalidation.extensions
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.FrameLayout
 import androidx.annotation.StringRes
 import br.com.redcode.easyform.library.R
 import br.com.redcode.easyvalidation.Validate
@@ -19,7 +18,7 @@ fun EditText.getDataAfterValidateInput(
     val hint: String? = when {
         fieldName != null && fieldName.isNotBlank() -> fieldName.toString()
         hint != null && hint.isNotBlank() -> hint.toString()
-        parent is FrameLayout && parent.parent is TextInputLayout -> (parent.parent as TextInputLayout).hint.toString()
+        isWrappedByTextInputLayout() -> getTextInputLayout()?.hint?.toString()
         else -> null
     }
 
@@ -30,11 +29,13 @@ fun EditText.getDataAfterValidateInput(
             setMessageError(errorMessage)
             return null
         }
+
         isEmptyData && hint.isNullOrBlank().not() -> {
             val errorField = context.getString(R.string.field_x_is_not_filled, hint)
             setMessageError(errorField)
             return null
         }
+
         isEmptyData && hint.isNullOrBlank() -> {
             val errorGeneric = context.getString(R.string.this_field_is_not_filled)
             setMessageError(errorGeneric)
@@ -101,6 +102,4 @@ infix fun EditText?.isFilledWithHint(@StringRes idString: Int): Boolean {
     return isFilledWithHint(this?.context?.getString(idString))
 }
 
-infix fun EditText?.isFilledWithHint(fieldName: String?): Boolean {
-    return isFilled(fieldName = fieldName)
-}
+infix fun EditText?.isFilledWithHint(fieldName: String?) = isFilled(fieldName = fieldName)
