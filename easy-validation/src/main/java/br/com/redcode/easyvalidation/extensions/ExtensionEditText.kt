@@ -61,9 +61,9 @@ fun EditText.showKeyboard() {
 }
 
 fun EditText.hideKeyboard() {
-    val inputMethodManager =
-        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+    val systemService = context.getSystemService(Context.INPUT_METHOD_SERVICE)
+    val imm = systemService as InputMethodManager
+    imm.hideSoftInputFromWindow(windowToken, 0)
 }
 
 fun EditText.setMessageError(@StringRes intMessage: Int) {
