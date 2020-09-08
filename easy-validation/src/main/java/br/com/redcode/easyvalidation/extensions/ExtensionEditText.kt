@@ -66,10 +66,15 @@ fun EditText.hideKeyboard() {
     inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
 }
 
+fun EditText.setMessageError(@StringRes intMessage: Int) {
+    val message = context.getString(intMessage)
+    setMessageError(message = message)
+}
+
 fun EditText.setMessageError(message: String?) {
-    when {
-        isWrappedByTextInputLayout() -> getTextInputLayout()?.error = message
-        else -> error = message
+    when (isWrappedByTextInputLayout()) {
+        true -> getTextInputLayout()?.error = message
+        false -> error = message
     }
 }
 
