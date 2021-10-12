@@ -34,7 +34,7 @@ fun EditText.getDataAfterValidateInput(
             setMessageError(errorGeneric)
             return null
         }
-        else -> error = null
+        else -> setMessageError(null)
     }
 
     return data
